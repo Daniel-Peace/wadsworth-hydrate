@@ -1,0 +1,4 @@
+services:
+  hydrate-bot:
+    image: wadsworth-hydrate-image
+    restart: unless-stopped

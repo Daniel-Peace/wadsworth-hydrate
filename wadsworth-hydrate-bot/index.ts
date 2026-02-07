@@ -1,5 +1,5 @@
 import { Client, Events, GatewayIntentBits, Collection } from "discord.js";
-import { token } from "../botConfig.json";
+import { token } from "./botConfig.json";
 import path from "path";
 import fs from "fs";
 
@@ -14,10 +14,12 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] }) as Client & {
 client.commands = new Collection();
 
 // Get path to command directory
-const commandsDirectoryPath = path.join(__dirname, "commands");
+const commandsDirectoryPath = path.resolve("commands");
 
 // Get all contents of directory and then filter it down to just files ending in ".ts"
-const commandFiles = fs.readdirSync(commandsDirectoryPath).filter((file) => file.endsWith(".ts"));
+const commandFiles = fs
+  .readdirSync(commandsDirectoryPath)
+  .filter((file) => file.endsWith(".ts"));
 
 // We loop over each file and import the "command" module and add it to the collection/map of commands
 for (const file of commandFiles) {
@@ -43,7 +45,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 });
 
-// Now we set up the listener for 
+// Now we set up the listener for
 
 client.once(Events.ClientReady, (readyClient) => {
   console.log(`Ready! Logged in as ${readyClient.user.tag}`);
