@@ -5,28 +5,22 @@ import fs from "fs";
 import path from "path";
 import { exit } from "process";
 
-// Get commandline arguments
 const args = process.argv.slice(2);
 
-// Validate arguments and get the passed in mode
 const option = validate_args(args);
 
 const testCommands: RESTPostAPIApplicationCommandsJSONBody[] = [];
 const prodCommands: RESTPostAPIApplicationCommandsJSONBody[] = [];
 
-// Get path to command directory
 const commandsDirectoryPath = path.join(__dirname, "commands");
 
-// Get all contents of directory and then filter it down to just files ending in ".ts"
 const commandFiles = fs
   .readdirSync(commandsDirectoryPath)
   .filter((file) => file.endsWith(".ts"));
 
-// We loop over each file and import the "command" module and add it to the collection/map of commands
 for (const file of commandFiles) {
   const filePath = path.join(commandsDirectoryPath, file);
 
-  // Get model from file as command object
   const command = await import(filePath);
 
   if ("data" in command && "execute" in command) {
